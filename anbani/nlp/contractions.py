@@ -15,16 +15,12 @@ def expand(word):
 
     return word
 
-
 def expand_text(text):
-    # Look up contractions sequentially and replace them with expansions
-    while True:
-        match = re.search(r'[ა-ჿ]+\.', text)
-        if bool(match) == False:
-            break
-
-        expansion = expand(text[match.start():match.end()])
-        text = text[:match.start()] + expansion + text[match.end():]
-
+    # Sort contractions by length (longest first) to avoid partial matches
+    sorted_contractions = sorted(cmap.keys(), key=len, reverse=True)
+    
+    for contraction in sorted_contractions:
+        if contraction in text:
+            text = text.replace(contraction, cmap[contraction])
+    
     return text
-
